@@ -3,6 +3,7 @@ import re
 import numpy as np
 from pprint import pprint
 
+# Assumptions: Precisely one student per page. No +'s or -'s in grades.
 
 def GPA_from_letter_grades(letterGrades):
     """
@@ -11,8 +12,6 @@ def GPA_from_letter_grades(letterGrades):
     letter2number = {'A':4.0, 'B':3.0, 'C':2.0, 'D':1.0, 'F':0.0}
     return np.mean([letter2number[letter] for letter in letterGrades])
 
-# Assumptions: Precisely one student per page. No +'s or -'s in grades.
-
 # First, find the file.
 
 # Then, extract text from the file.
@@ -20,11 +19,12 @@ with open('streamPDF.pdf', 'rb') as f:
     raw = slate.PDF(f)
 
 # Parse the text.
-
 students = []
 for page in raw:
     # First find the name of the student.
     name = re.search(r"Progress Report For (.*) \(", page).group(1)
+    if name == "Ansar Abdusemed Bahrun":
+        continue
     # Then grab the section containing their grades.
     # The section contraining the grades begins with "Overall".
     gradeSection = re.search(r"Overall(.*?)Date", page, re.S).group(1)
@@ -45,7 +45,6 @@ for page in raw:
                      'GPA' : GPA_from_letter_grades(letterGrades)})
 
 pprint(students)
-
-# Analyze the text.
+print("Class Average GPA: " + str(np.mean([student['GPA'] for student in students])))
 
 # Display results.
