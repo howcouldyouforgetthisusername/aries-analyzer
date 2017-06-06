@@ -48,13 +48,22 @@ for page in raw:
 pprint(students)
 
 # Display results.
-top = Tkinter.Tk()
-text = Tkinter.Text(top)
+
+#top = Tkinter.Tk()
+#text = Tkinter.Text(top)
 output = ""
-for student in sorted(students, key=lambda x: x['GPA']):
-    output += student['name'] + ' : ' + str(student['GPA']) + '\n'
+for student in sorted(students, key=lambda x: -x['GPA']):
+    output += student['name'] + ': ' + '{:.2f}'.format(student['GPA']) + '\n'
 output += "Class Average GPA: " + str(np.mean([student['GPA'] for student in students]))
-text.insert(Tkinter.INSERT, output)
-text.pack()
-text.configure(state="disabled")
-top.mainloop()
+
+r = Tkinter.Tk()
+r.withdraw()
+r.clipboard_clear()
+r.clipboard_append(output)
+r.update() # now it stays on the clipboard after the window is closed
+r.destroy()
+
+#text.insert(Tkinter.INSERT, output)
+#text.pack()
+#text.configure(state="disabled")
+#top.mainloop()
