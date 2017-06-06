@@ -2,6 +2,7 @@ import slate
 import re
 import numpy as np
 from pprint import pprint
+import Tkinter
 
 # Assumptions: Precisely one student per page. No +'s or -'s in grades.
 
@@ -45,6 +46,15 @@ for page in raw:
                      'GPA' : GPA_from_letter_grades(letterGrades)})
 
 pprint(students)
-print("Class Average GPA: " + str(np.mean([student['GPA'] for student in students])))
 
 # Display results.
+top = Tkinter.Tk()
+text = Tkinter.Text(top)
+output = ""
+for student in sorted(students, key=lambda x: x['GPA']):
+    output += student['name'] + ' : ' + str(student['GPA']) + '\n'
+output += "Class Average GPA: " + str(np.mean([student['GPA'] for student in students]))
+text.insert(Tkinter.INSERT, output)
+text.pack()
+text.configure(state="disabled")
+top.mainloop()
